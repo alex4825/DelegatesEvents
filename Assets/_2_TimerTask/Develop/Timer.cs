@@ -29,9 +29,6 @@ public class Timer
 
     public void Start(float duration)
     {
-        if (IsRunning)
-            Reset();
-
         _duration = duration;
 
         _process = _monoBehaviour.StartCoroutine(TimerProcess());
@@ -39,14 +36,22 @@ public class Timer
         Started?.Invoke();
     }
 
-    public void Pause() => IsPause = true;
+    /// <returns>Timer was paused or not. </returns>
+    public bool TooglePause()
+    {
+        if (IsRunning)
+            IsPause = IsPause == false;
 
-    public void Resume() => IsPause = false;
+        return IsRunning && IsPause;
+    }
 
     public void Reset()
     {
-        _monoBehaviour.StopCoroutine(_process);
+        if (_process != null)
+            _monoBehaviour.StopCoroutine(_process);
+
         _process = null;
+        IsPause = false;
     }
 
     private IEnumerator TimerProcess()
@@ -63,6 +68,6 @@ public class Timer
 
         _elapsedTime = 0;
 
-        Finished?.Invoke();
+        Reset();
     }
 }
