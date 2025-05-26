@@ -1,11 +1,13 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TimerView : MonoBehaviour
 {
     [SerializeField] private TimerPlayExample _example;
     [SerializeField] private TextMeshProUGUI _timerLabel;
+    [SerializeField] private Slider _timerSlider;
 
     private Timer _timer;
     private Coroutine _timerViewProcess;
@@ -36,6 +38,7 @@ public class TimerView : MonoBehaviour
         while (_timer.IsRunning)
         {
             _timerLabel.text = _timer.ElapsedTime.ToString("0.00");
+            _timerSlider.value = _timer.CurrentProgress;
             yield return null;
         }
     }

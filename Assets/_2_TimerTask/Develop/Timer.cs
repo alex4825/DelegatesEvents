@@ -20,6 +20,8 @@ public class Timer
 
     public float ElapsedTime => _elapsedTime;
 
+    public float CurrentProgress => _elapsedTime / _duration;
+
     public bool IsRunning => _process != null;
 
     public bool IsPause { get; private set; }
