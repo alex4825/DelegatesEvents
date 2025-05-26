@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayExample : MonoBehaviour
+public class WalletPlayExample : MonoBehaviour
 {
     [SerializeField] private CurrencyChangeButton[] _addCurrancyButtons;
     [SerializeField] private CurrencyChangeButton[] _subtractCurrancyButtons;

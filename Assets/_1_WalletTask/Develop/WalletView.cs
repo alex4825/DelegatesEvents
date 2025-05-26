@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WalletView : MonoBehaviour
 {
-    [SerializeField] private PlayExample _playExample;
+    [SerializeField] private WalletPlayExample _playExample;
     [SerializeField] private GameObject _walletContainer;
 
     [SerializeField] private TextMeshProUGUI _coinsUIText;
