@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,9 @@ public class TimerView : MonoBehaviour
     [SerializeField] private TimerPlayExample _example;
     [SerializeField] private TextMeshProUGUI _timerLabel;
     [SerializeField] private Slider _timerSlider;
+    [SerializeField] private Image _heartsImage;
+
+    private const string HeartsAmountKey = "_HeartsAmount";
 
     private Timer _timer;
     private Coroutine _timerViewProcess;
@@ -31,7 +35,7 @@ public class TimerView : MonoBehaviour
         _timer.Finished += OnTimerFinished;
     }
 
-    private void OnTimerStarted() => _timerViewProcess = StartCoroutine(ShowTimer());
+    private void OnTimerStarted() => _timerViewProcess = StartCoroutine(ShowTimer()); 
 
     private IEnumerator ShowTimer()
     {
@@ -39,8 +43,14 @@ public class TimerView : MonoBehaviour
         {
             _timerLabel.text = _timer.ElapsedTime.ToString("0.00");
             _timerSlider.value = _timer.CurrentProgress;
+            UpdateHearts();
             yield return null;
         }
+    }
+
+    private void UpdateHearts()
+    {
+        _heartsImage.material.SetFloat(HeartsAmountKey, (int)Math.Ceiling(_timer.ElapsedTime));
     }
 
     private void OnTimerFinished()
