@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayButton : MonoBehaviour, IPointerClickHandler
+public class StartButton : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private TMP_InputField _inputField;
 

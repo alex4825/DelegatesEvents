@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ public class TimerView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _timerLabel;
 
     private Timer _timer;
-
+    private Coroutine _timerViewProcess;
 
     private void Awake()
     {
@@ -20,15 +19,17 @@ public class TimerView : MonoBehaviour
     {
         _example.TimerInitiated -= OnTimerInitiated;
         _timer.Started -= OnTimerStarted;
+        _timer.Finished -= OnTimerFinished;
     }
 
     private void OnTimerInitiated(Timer timer)
     {
         _timer = timer;
         _timer.Started += OnTimerStarted;
+        _timer.Finished += OnTimerFinished;
     }
 
-    private void OnTimerStarted() => StartCoroutine(ShowTimer());
+    private void OnTimerStarted() => _timerViewProcess = StartCoroutine(ShowTimer());
 
     private IEnumerator ShowTimer()
     {
@@ -37,5 +38,13 @@ public class TimerView : MonoBehaviour
             _timerLabel.text = _timer.ElapsedTime.ToString("0.00");
             yield return null;
         }
+    }
+
+    private void OnTimerFinished()
+    {
+        if (_timerViewProcess != null)
+            StopCoroutine(_timerViewProcess);
+
+        _timerLabel.text = "0";
     }
 }

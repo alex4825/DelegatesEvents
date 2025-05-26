@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class TimerPlayExample : MonoBehaviour
 {
-    [SerializeField] private PlayButton _playButton;
+    [SerializeField] private StartButton _startButton;
     [SerializeField] private PauseButton _pauseButton;
+    [SerializeField] private ResetButton _resetButton;
 
     private Timer _timer;
 
@@ -16,14 +17,16 @@ public class TimerPlayExample : MonoBehaviour
 
         TimerInitiated?.Invoke(_timer);
 
-        _playButton.Clicked += StartTimer;
+        _startButton.Clicked += StartTimer;
         _pauseButton.Clicked += TryTooglePauseTimer;
+        _resetButton.Clicked += ResetTimer;
     }
 
     private void OnDisable()
     {
-        _playButton.Clicked -= StartTimer;
+        _startButton.Clicked -= StartTimer;
         _pauseButton.Clicked -= TryTooglePauseTimer;
+        _resetButton.Clicked -= ResetTimer;
     }
 
     private void StartTimer(int duration)
@@ -32,4 +35,9 @@ public class TimerPlayExample : MonoBehaviour
     }
 
     private bool TryTooglePauseTimer() => _timer.TooglePause();
+
+    private void ResetTimer()
+    {
+        _timer.Reset();
+    }
 }

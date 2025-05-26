@@ -16,10 +16,7 @@ public class Timer
     }
 
     public event Action Started;
-    public event Action Paused;
-    public event Action Unpaused;
     public event Action Finished;
-    public event Action Resetted;
 
     public float ElapsedTime => _elapsedTime;
 
@@ -29,6 +26,8 @@ public class Timer
 
     public void Start(float duration)
     {
+        Reset();
+
         _duration = duration;
 
         _process = _monoBehaviour.StartCoroutine(TimerProcess());
@@ -48,7 +47,10 @@ public class Timer
     public void Reset()
     {
         if (_process != null)
+        {
             _monoBehaviour.StopCoroutine(_process);
+            Finished?.Invoke();
+        }
 
         _process = null;
         IsPause = false;
