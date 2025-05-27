@@ -11,6 +11,7 @@ public class TimerView : MonoBehaviour
     [SerializeField] private Slider _timerSlider;
     [SerializeField] private Image _heartsImage;
 
+    private const string StartHeartsAmountKey = "_StartHeartsAmount";
     private const string HeartsAmountKey = "_HeartsAmount";
 
     private Timer _timer;
@@ -35,10 +36,12 @@ public class TimerView : MonoBehaviour
         _timer.Finished += OnTimerFinished;
     }
 
-    private void OnTimerStarted() => _timerViewProcess = StartCoroutine(ShowTimer()); 
+    private void OnTimerStarted() => _timerViewProcess = StartCoroutine(ShowTimer());
 
     private IEnumerator ShowTimer()
     {
+        SetStartHeartsAmount();
+
         while (_timer.IsRunning)
         {
             UpdateViews();
@@ -46,10 +49,11 @@ public class TimerView : MonoBehaviour
         }
     }
 
+    private void SetStartHeartsAmount()
+        => _heartsImage.material.SetFloat(StartHeartsAmountKey, (int)Math.Ceiling(_timer.ElapsedTime));
+
     private void UpdateHearts()
-    {
-        _heartsImage.material.SetFloat(HeartsAmountKey, (int)Math.Ceiling(_timer.ElapsedTime));
-    }
+        => _heartsImage.material.SetFloat(HeartsAmountKey, (int)Math.Ceiling(_timer.ElapsedTime));
 
     private void OnTimerFinished()
     {
