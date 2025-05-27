@@ -57,7 +57,7 @@ Material:
     m_Floats:
     - _ContainerSizeX: 500
     - _ContainerSizeY: 50
-    - _HeartsAmount: 0
+    - _HeartsAmount: 20
     - _HeartsHeight: 1
     - _HeartsStartAmount: 10
     m_Colors: []

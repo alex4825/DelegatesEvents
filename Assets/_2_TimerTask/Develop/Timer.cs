@@ -56,6 +56,7 @@ public class Timer
 
         _process = null;
         IsPause = false;
+        _elapsedTime = _duration;
     }
 
     private IEnumerator TimerProcess()

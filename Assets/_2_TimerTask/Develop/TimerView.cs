@@ -41,9 +41,7 @@ public class TimerView : MonoBehaviour
     {
         while (_timer.IsRunning)
         {
-            _timerLabel.text = _timer.ElapsedTime.ToString("0.00");
-            _timerSlider.value = _timer.CurrentProgress;
-            UpdateHearts();
+            UpdateViews();
             yield return null;
         }
     }
@@ -58,6 +56,13 @@ public class TimerView : MonoBehaviour
         if (_timerViewProcess != null)
             StopCoroutine(_timerViewProcess);
 
-        _timerLabel.text = "0";
+        UpdateViews();
+    }
+
+    private void UpdateViews()
+    {
+        _timerLabel.text = _timer.ElapsedTime.ToString("0.00");
+        _timerSlider.value = _timer.CurrentProgress;
+        UpdateHearts();
     }
 }
