@@ -51,12 +51,13 @@ public class Timer
         if (_process != null)
         {
             _monoBehaviour.StopCoroutine(_process);
+
+            _process = null;
+            IsPause = false;
+            _elapsedTime = 0;
+
             Finished?.Invoke();
         }
-
-        _process = null;
-        IsPause = false;
-        _elapsedTime = _duration;
     }
 
     private IEnumerator TimerProcess()

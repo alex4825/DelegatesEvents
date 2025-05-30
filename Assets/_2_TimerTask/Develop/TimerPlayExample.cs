@@ -22,7 +22,7 @@ public class TimerPlayExample : MonoBehaviour
         _resetButton.Clicked += ResetTimer;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _startButton.Clicked -= StartTimer;
         _pauseButton.Clicked -= TryTooglePauseTimer;

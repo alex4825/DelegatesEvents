@@ -15,14 +15,16 @@ public class PauseButton : MonoBehaviour, IPointerClickHandler
 
     private Timer _timer;
 
-    private void Start()
+    private void Awake()
     {
         _example.TimerInitiated += OnTimerInitiated;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _example.TimerInitiated -= OnTimerInitiated;
+        _timer.Started -= ResetText;
+        _timer.Finished -= ResetText;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -38,7 +40,9 @@ public class PauseButton : MonoBehaviour, IPointerClickHandler
     private void OnTimerInitiated(Timer timer)
     {
         _timer = timer;
-        _timer.Started += () => _buttonLabel.text = PauseText;
-        _timer.Finished += () => _buttonLabel.text = PauseText;
+        _timer.Started += ResetText;
+        _timer.Finished += ResetText;
     }
+
+    private void ResetText() => _buttonLabel.text = PauseText;
 }
