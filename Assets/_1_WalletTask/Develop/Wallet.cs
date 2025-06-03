@@ -1,45 +1,33 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class Wallet
 {
-    private Currency[] _currencies;
+    private Dictionary<CurrencyTypes, Currency> _currencies;
 
-    public Wallet(params Currency[] currencies)
+    public Wallet(params KeyValuePair<CurrencyTypes, int>[] currencies)
     {
-        _currencies = currencies;
+        _currencies = new Dictionary<CurrencyTypes, Currency>();
+
+        foreach (var currency in currencies)
+            if (_currencies.TryAdd(currency.Key, new Currency(currency.Value)) == false)
+                Debug.Log($"{currency.Key} is already exists");
     }
 
-    public event Action Changed;
+    public event Action<CurrencyTypes> Changed;
 
-    public void AddCurancy(Currencies name, int amount)
+    public void AddCurancy(CurrencyTypes name, int amount)
     {
-        GetCurrencyBy(name).Add(amount);
-        Changed?.Invoke();
+        _currencies[name].Add(amount);
+        Changed?.Invoke(name);
     }
 
-    public void SubtractCurancy(Currencies name, int amount)
+    public void SubtractCurancy(CurrencyTypes name, int amount)
     {
-        GetCurrencyBy(name).Subtract(amount);
-        Changed?.Invoke();
+        _currencies[name].Subtract(amount);
+        Changed?.Invoke(name);
     }
 
-    public int? GetAmountFrom(Currencies name)
-    {
-        foreach (Currency currency in _currencies)
-            if (currency.Name == name)
-                return currency.Amount;
-
-        return null;
-    }
-
-    private Currency GetCurrencyBy(Currencies name)
-    {
-        foreach (Currency currency in _currencies)
-            if (currency.Name == name)
-            {
-                return currency;
-            }
-
-        return null;
-    }
+    public int GetAmountFrom(CurrencyTypes name) => _currencies[name].Amount;
 }

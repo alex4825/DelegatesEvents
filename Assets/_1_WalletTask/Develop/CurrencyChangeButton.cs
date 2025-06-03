@@ -6,9 +6,9 @@ using UnityEngine.EventSystems;
 public class CurrencyChangeButton : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private TMP_InputField _inputField;
-    [SerializeField] private Currencies _currency;
+    [SerializeField] private CurrencyTypes _currency;
 
-    public event Action<Currencies, int> Clicked;
+    public event Action<CurrencyTypes, int> Clicked;
 
     public void OnPointerClick(PointerEventData eventData)
     {

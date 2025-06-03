@@ -2,16 +2,12 @@ using UnityEngine;
 
 public class Currency
 {
-    private Currencies _name;
     private int _amount;
 
-    public Currency(Currencies name, int amount)
+    public Currency(int amount)
     {
-        _name = name;
         _amount = amount;
     }
-
-    public Currencies Name => _name;
 
     public int Amount
     {
@@ -21,7 +17,7 @@ public class Currency
         {
             if (value < 0)
             {
-                Debug.LogWarning($"Amount of {Name} can't be negative");
+                Debug.LogWarning($"Amount of currency can't be negative");
                 return;
             }
 

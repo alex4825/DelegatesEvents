@@ -1,43 +1,45 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class WalletView : MonoBehaviour
 {
-    [SerializeField] private WalletPlayExample _playExample;
     [SerializeField] private GameObject _walletContainer;
 
-    [SerializeField] private TextMeshProUGUI _coinsUIText;
-    [SerializeField] private TextMeshProUGUI _diamondsUIText;
-    [SerializeField] private TextMeshProUGUI _energyUIText;
+    [SerializeField] private List<CurrencyTextWrapper> _currencyTexts;
 
+    private Dictionary<CurrencyTypes, TextMeshProUGUI> _currencyTextDictionary;
     private Wallet _wallet;
-
-    private void Awake()
-    {
-        _playExample.WalletCreated += Enable;
-    }
     
     private void OnDestroy()
     {
-        _playExample.WalletCreated -= Enable;
-        _wallet.Changed -= UpdateCurrencyTexts;
+        _wallet.Changed -= UpdateCurrencyView;
     }
 
-    private void Enable(Wallet wallet)
+    public void Initialize(Wallet wallet)
     {
         _walletContainer.SetActive(true);
         _wallet = wallet;
 
-        _wallet.Changed += UpdateCurrencyTexts;
+        _currencyTextDictionary = new();
 
-        UpdateCurrencyTexts();
+        foreach (var listPair in _currencyTexts)
+            _currencyTextDictionary.TryAdd(listPair.currencyType, listPair.currencyText);
+
+        _wallet.Changed += UpdateCurrencyView;
+
+        foreach (var pair in _currencyTextDictionary)
+            UpdateCurrencyView(pair.Key);
     }
 
-    private void UpdateCurrencyTexts()
+    private void UpdateCurrencyView(CurrencyTypes currencyType)
+        => _currencyTextDictionary[currencyType].text = _wallet.GetAmountFrom(currencyType).ToString();
+
+    [Serializable]
+    private class CurrencyTextWrapper
     {
-        _coinsUIText.text = _wallet.GetAmountFrom(Currencies.Coin).ToString();
-        _diamondsUIText.text = _wallet.GetAmountFrom(Currencies.Diamond).ToString();
-        _energyUIText.text = _wallet.GetAmountFrom(Currencies.Energy).ToString();
+        public CurrencyTypes currencyType;
+        public TextMeshProUGUI currencyText;
     }
 }
