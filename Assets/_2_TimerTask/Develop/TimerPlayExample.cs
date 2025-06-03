@@ -1,21 +1,23 @@
-using System;
 using UnityEngine;
 
 public class TimerPlayExample : MonoBehaviour
 {
+    [SerializeField] private TimerView[] _timerViews;
+
     [SerializeField] private StartButton _startButton;
     [SerializeField] private PauseButton _pauseButton;
     [SerializeField] private ResetButton _resetButton;
 
     private Timer _timer;
 
-    public event Action<Timer> TimerInitiated;
-
     private void Start()
     {
         _timer = new Timer(this);
 
-        TimerInitiated?.Invoke(_timer);
+        foreach (TimerView timerView in _timerViews)
+            timerView.Initialize(_timer);
+
+        _pauseButton.Initialize(_timer);
 
         _startButton.Clicked += StartTimer;
         _pauseButton.Clicked += TryTooglePauseTimer;
