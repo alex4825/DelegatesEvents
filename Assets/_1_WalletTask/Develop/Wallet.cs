@@ -1,33 +1,20 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 public class Wallet
 {
-    private Dictionary<CurrencyTypes, Currency> _currencies;
+    private List<Currency> _currencies;
 
-    public Wallet(params KeyValuePair<CurrencyTypes, int>[] currencies)
+    public Wallet(params KeyValuePair<CurrencyTypes, ReactiveVariable<int>>[] currencies)
     {
-        _currencies = new Dictionary<CurrencyTypes, Currency>();
+        _currencies = new();
 
         foreach (var currency in currencies)
-            if (_currencies.TryAdd(currency.Key, new Currency(currency.Value)) == false)
-                Debug.Log($"{currency.Key} is already exists");
+            _currencies.Add(new Currency(currency.Key, currency.Value));
     }
 
-    public event Action<CurrencyTypes> Changed;
+    public List<Currency> Currencies => _currencies;
 
-    public void AddCurancy(CurrencyTypes name, int amount)
-    {
-        _currencies[name].Add(amount);
-        Changed?.Invoke(name);
-    }
-
-    public void SubtractCurancy(CurrencyTypes name, int amount)
-    {
-        _currencies[name].Subtract(amount);
-        Changed?.Invoke(name);
-    }
-
-    public int GetAmountFrom(CurrencyTypes name) => _currencies[name].Amount;
+    public Currency GetCurrencyBy(CurrencyTypes type)
+        => _currencies.First(item => item.Type == type);
 }

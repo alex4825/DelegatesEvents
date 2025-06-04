@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+ using UnityEngine;
 
 public class WalletPlayExample : MonoBehaviour
 {
@@ -13,9 +11,9 @@ public class WalletPlayExample : MonoBehaviour
     private void Awake()
     {
         _wallet = new Wallet(
-            new KeyValuePair<CurrencyTypes, int>(CurrencyTypes.Coin, 0),
-            new KeyValuePair<CurrencyTypes, int>(CurrencyTypes.Diamond, 0),
-            new KeyValuePair<CurrencyTypes, int>(CurrencyTypes.Energy, 0)
+            new (CurrencyTypes.Coin, new ReactiveVariable<int>(0)),
+            new (CurrencyTypes.Diamond, new ReactiveVariable<int>(0)),
+            new (CurrencyTypes.Energy, new ReactiveVariable<int>(0))
             );
 
         _walletView.Initialize(_wallet);
@@ -36,7 +34,7 @@ public class WalletPlayExample : MonoBehaviour
             button.Clicked -= SubtractCurrency;
     }
 
-    private void AddCurrency(CurrencyTypes currencyName, int amount) => _wallet.AddCurancy(currencyName, amount);
+    private void AddCurrency(CurrencyTypes currencyType, int amount) => _wallet.GetCurrencyBy(currencyType).Add(amount);
 
-    private void SubtractCurrency(CurrencyTypes currencyName, int amount) => _wallet.SubtractCurancy(currencyName, amount);
+    private void SubtractCurrency(CurrencyTypes currencyType, int amount) => _wallet.GetCurrencyBy(currencyType).Subtract(amount);
 }

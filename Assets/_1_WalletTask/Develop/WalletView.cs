@@ -11,10 +11,11 @@ public class WalletView : MonoBehaviour
 
     private Dictionary<CurrencyTypes, TextMeshProUGUI> _currencyTextDictionary;
     private Wallet _wallet;
-    
+
     private void OnDestroy()
     {
-        _wallet.Changed -= UpdateCurrencyView;
+        foreach (var currency in _wallet.Currencies)
+            currency.Changed -= UpdateCurrencyView;
     }
 
     public void Initialize(Wallet wallet)
@@ -27,14 +28,15 @@ public class WalletView : MonoBehaviour
         foreach (var listPair in _currencyTexts)
             _currencyTextDictionary.TryAdd(listPair.currencyType, listPair.currencyText);
 
-        _wallet.Changed += UpdateCurrencyView;
+        foreach (var currency in _wallet.Currencies)
+            currency.Changed += UpdateCurrencyView;
 
         foreach (var pair in _currencyTextDictionary)
-            UpdateCurrencyView(pair.Key);
+            UpdateCurrencyView(_wallet.GetCurrencyBy(pair.Key));
     }
 
-    private void UpdateCurrencyView(CurrencyTypes currencyType)
-        => _currencyTextDictionary[currencyType].text = _wallet.GetAmountFrom(currencyType).ToString();
+    private void UpdateCurrencyView(Currency currency)
+        => _currencyTextDictionary[currency.Type].text = currency.Amount.Value.ToString();
 
     [Serializable]
     private class CurrencyTextWrapper
