@@ -19,8 +19,8 @@ public class TimerHeartsView : TimerView
     protected override void UpdateView() => UpdateHearts();
 
     private void SetStartHeartsAmount()
-        => _heartsImage.material.SetFloat(StartHeartsAmountKey, (int)Math.Ceiling(Timer.ElapsedTime));
+        => _heartsImage.material.SetFloat(StartHeartsAmountKey, (int)Math.Ceiling(Timer.ElapsedTime.Value));
 
     private void UpdateHearts()
-        => _heartsImage.material.SetFloat(HeartsAmountKey, (int)Math.Ceiling(Timer.ElapsedTime));
+        => _heartsImage.material.SetFloat(HeartsAmountKey, (int)Math.Ceiling(Timer.ElapsedTime.Value));
 }

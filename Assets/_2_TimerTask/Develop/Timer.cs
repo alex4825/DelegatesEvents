@@ -7,20 +7,22 @@ public class Timer
     private MonoBehaviour _monoBehaviour;
     private Coroutine _process;
 
-    private float _duration;
-    private float _elapsedTime;
+    private ReactiveVariable<float> _duration;
+    private ReactiveVariable<float> _elapsedTime;
 
     public Timer(MonoBehaviour monoBehaviour)
     {
         _monoBehaviour = monoBehaviour;
+        _duration = new();
+        _elapsedTime = new();
     }
 
     public event Action Started;
     public event Action Finished;
 
-    public float ElapsedTime => _elapsedTime;
+    public IReadonlyVariable<float> ElapsedTime => _elapsedTime;
 
-    public float CurrentProgress => _elapsedTime / _duration;
+    public float CurrentProgress => _elapsedTime.Value / _duration.Value;
 
     public bool IsRunning => _process != null;
 
@@ -30,7 +32,7 @@ public class Timer
     {
         Reset();
 
-        _duration = duration;
+        _duration.Value = duration;
 
         _process = _monoBehaviour.StartCoroutine(TimerProcess());
 
@@ -54,7 +56,7 @@ public class Timer
 
             _process = null;
             IsPause = false;
-            _elapsedTime = 0;
+            _elapsedTime.Value = 0;
 
             Finished?.Invoke();
         }
@@ -62,17 +64,17 @@ public class Timer
 
     private IEnumerator TimerProcess()
     {
-        _elapsedTime = _duration;
+        _elapsedTime.Value = _duration.Value;
 
-        while (_elapsedTime > 0)
+        while (_elapsedTime.Value > 0)
         {
             if (IsPause == false)
-                _elapsedTime -= Time.deltaTime;
+                _elapsedTime.Value -= Time.deltaTime;
 
             yield return null;
         }
 
-        _elapsedTime = 0;
+        _elapsedTime.Value = 0;
 
         Reset();
     }
